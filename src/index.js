@@ -4,7 +4,7 @@ import App from "./components/App";
 import "./styles/globals.css";
 // import { Provider } from "react-redux";
 // import store from "./store";
-
+import "semantic-ui-css/semantic.min.css";
 ReactDOM.render(
   // <Provider store={store}>
   <App />,
