@@ -10,7 +10,6 @@ function App() {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/flight/:id">{/* <About /> */}</Route>
         <Route path="/login">
           <Login />
         </Route>

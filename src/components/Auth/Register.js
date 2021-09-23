@@ -7,6 +7,7 @@ import {
   Header,
   Message,
   Icon,
+  Select,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
@@ -17,6 +18,7 @@ const Register = () => {
   const [passwordConfirmation, setpasswordConfirmation] = useState("");
   const [errors, seterrors] = useState([]);
   const [loading, setloading] = useState(false);
+  const [role, setrole] = useState("");
 
   const isFormValid = () => {
     let errors = [];
@@ -103,7 +105,17 @@ const Register = () => {
               className={handleInputError(errors, "email")}
               type="email"
             />
-
+            <Form.Input
+              fluid
+              name="role"
+              icon="clipboard list"
+              iconPosition="left"
+              placeholder="Enter role"
+              onChange={(event) => setrole(event.target.value)}
+              value={role}
+              className={handleInputError(errors, "email")}
+              type="role"
+            />
             <Form.Input
               fluid
               name="password"
