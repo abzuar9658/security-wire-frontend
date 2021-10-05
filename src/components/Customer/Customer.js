@@ -2,14 +2,13 @@ import React from "react";
 import CreatedPrograms from "./CreatedPrograms";
 import { Button, Container } from "semantic-ui-react";
 
-// Customer' tasks:
-// View all created Programs
-// Create new Programs
-// Update Programs
-// Invite Researcher to a Programs
-// Delete Programs
+//TODO Customer' tasks:
+//TODO//View all created Programs
+//TODO: Create new Programs
+//TODO: Update Programs
+//TODO: Invite Researcher to a Programs
+//TODO: Delete Programs
 
-// TODO: Cusomter
 const Customer = ({ name }) => {
   return (
     <Container>

@@ -22,7 +22,7 @@ const CreatedPrograms = () => {
               <Table.HeaderCell>Sr #.</Table.HeaderCell>
               <Table.HeaderCell>Title</Table.HeaderCell>
               <Table.HeaderCell>Creation Date</Table.HeaderCell>
-              <Table.HeaderCell>Approved</Table.HeaderCell>
+              <Table.HeaderCell>Approval Status</Table.HeaderCell>
               <Table.HeaderCell>Visiblity</Table.HeaderCell>
               <Table.HeaderCell>Enrolled Researchers</Table.HeaderCell>
               <Table.HeaderCell>Invited Researchers</Table.HeaderCell>
