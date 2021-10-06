@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Loader, Table } from "semantic-ui-react";
 import { useSelector, useDispatch } from "react-redux";
 import { loadCreatedPrograms } from "../../actions";
-import { classExpression } from "@babel/types";
-
+import MyModal from "../MyModal";
 const CreatedPrograms = () => {
   const programs = useSelector((state) => state.createdPrograms);
   const dispatch = useDispatch();
@@ -26,17 +25,13 @@ const CreatedPrograms = () => {
               <Table.HeaderCell>Visiblity</Table.HeaderCell>
               <Table.HeaderCell>Enrolled Researchers</Table.HeaderCell>
               <Table.HeaderCell>Invited Researchers</Table.HeaderCell>
+              <Table.HeaderCell>Actions</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {programs.data.program.map((program, index) => {
               return (
-                <Table.Row
-                  onClick={() => {
-                    console.log(program._id);
-                  }}
-                  className="tableHover"
-                >
+                <Table.Row key={program._id}>
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>{program.title}</Table.Cell>
                   <Table.Cell>{program.date}</Table.Cell>
@@ -48,6 +43,15 @@ const CreatedPrograms = () => {
                   </Table.Cell>
                   <Table.Cell>{program.enrolled.length}</Table.Cell>
                   <Table.Cell>{program.invited.length}</Table.Cell>
+                  <Table.Cell>
+                    <MyModal
+                      component="programform"
+                      header="Update Program"
+                      data={program}
+                      color="red"
+                      size="mini"
+                    />
+                  </Table.Cell>
                 </Table.Row>
               );
             })}

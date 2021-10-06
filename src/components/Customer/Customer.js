@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import CreatedPrograms from "./CreatedPrograms";
 import { Button, Container } from "semantic-ui-react";
+import MyModal from "../MyModal";
 
 //TODO Customer' tasks:
 //TODO//View all created Programs
@@ -17,7 +18,7 @@ const Customer = ({ name }) => {
       <h2>Welcome {name}</h2>
       <CreatedPrograms />
       <br />
-      <Button primary>Create new Program</Button>
+      <MyModal component="programform" header="Create Program" />
     </Container>
   );
 };
