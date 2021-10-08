@@ -3,6 +3,7 @@ import { Container, Loader, Table } from "semantic-ui-react";
 import { useSelector, useDispatch } from "react-redux";
 import { loadCreatedPrograms } from "../../actions";
 import MyModal from "../MyModal";
+
 const CreatedPrograms = () => {
   const programs = useSelector((state) => state.createdPrograms);
   const dispatch = useDispatch();
@@ -10,6 +11,8 @@ const CreatedPrograms = () => {
     dispatch(loadCreatedPrograms());
   }, [programs.data && programs.data.data && programs.data.data.results]);
 
+  if (programs.isLoading) return <Loader active />;
+  if (programs.isError) return <h3>{programs.errorMessage}</h3>;
   return (
     <Container>
       <h4>All Created Programs</h4>

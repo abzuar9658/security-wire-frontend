@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Modal } from "semantic-ui-react";
-import { Link } from "react-router-dom";
 import ProgramForm from "./Customer/ProgramForm";
+
 function MyModal({ component, header, data, color, type, name, size }) {
   const [open, setOpen] = React.useState(false);
   const toggleModal = () => {
