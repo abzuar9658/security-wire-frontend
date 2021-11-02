@@ -65,29 +65,3 @@ export const clearErrors = () => {
     type: actionTypes.CLEAR_ERRORS,
   };
 };
-
-const programsLoading = () => {
-  return {
-    type: actionTypes.LOADING_CREATED_PROGRAMS,
-  };
-};
-
-export const loadCreatedPrograms = () => async (dispatch) => {
-  dispatch(programsLoading());
-
-  try {
-    const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    };
-    const res = await axios.get(`${API}/programs/`, config);
-    dispatch({
-      type: actionTypes.LOAD_CREATED_PROGRAMS_SUCCESS,
-      payload: res.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: actionTypes.LOAD_CREATED_PROGRAMS_FAIL,
-      payload: error.message,
-    });
-  }
-};

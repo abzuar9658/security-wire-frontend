@@ -1,19 +1,41 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Form, Select } from "semantic-ui-react";
+import {
+  updateProgram,
+  loadCreatedPrograms,
+} from "../../actions/customerActions";
+import { useDispatch } from "react-redux";
 import MultiSelect from "./MultiSelect";
 import InputSelect from "./MultiInput";
-const ProgramForm = ({ program }) => {
+const ProgramForm = ({ program, toggleModal }) => {
+  const dispatch = useDispatch();
   const [title, settitle] = useState((program && program.title) || "");
   const [intro, setintro] = useState((program && program.intro) || "");
   const [detail, setdetail] = useState((program && program.detail) || "");
   const [active, setactive] = useState((program && program.active) || null);
+  // const [vtr, setvrt] = useState((program && program.active) || null);
   const [isPublic, setisPublic] = useState(
     (program && program.ispublic) || null
   );
-  const [enrolled, setenrolled] = useState((program && program.invited) || []);
 
   return (
-    <Form size="large" autoComplete="off">
+    <Form
+      size="large"
+      autoComplete="off"
+      onSubmit={() => {
+        dispatch(
+          updateProgram({
+            _id: program._id,
+            title,
+            intro,
+            detail,
+            active,
+            isPublic,
+          })
+        );
+        toggleModal();
+        dispatch(loadCreatedPrograms());
+      }}>
       <Form.Input
         fluid
         name="title"
@@ -23,6 +45,7 @@ const ProgramForm = ({ program }) => {
         onChange={(event) => {
           settitle(event.target.value);
         }}
+        label="Enter program title"
         value={title}
       />
       <Form.Input
@@ -33,12 +56,14 @@ const ProgramForm = ({ program }) => {
         placeholder="Enter Intro"
         onChange={(event) => {
           setintro(event.target.value);
+          console.log("INTRO: ", intro);
         }}
         value={intro}
+        label="Is program intro ?"
       />
       <InputSelect placeholder="Enter InScope Links" />
       <InputSelect placeholder="Enter OutScope Links" />
-      <MultiSelect />
+      <InputSelect placeholder="Enter VRTs" />
       <Form.TextArea
         fluid
         name="detail"
@@ -47,6 +72,7 @@ const ProgramForm = ({ program }) => {
           setdetail(event.target.value);
         }}
         value={detail}
+        label="Enter details about the program?"
       />
       <Form.Field
         control={Select}
@@ -59,6 +85,7 @@ const ProgramForm = ({ program }) => {
         }}
         defaultValue={active ? "Active" : "Inactive"}
         placeholder={active ? "Active" : "Inactive"}
+        label="Is program active ?"
       />
       <Form.Field
         control={Select}
@@ -71,16 +98,9 @@ const ProgramForm = ({ program }) => {
         }}
         defaultValue={isPublic ? "Public" : "Private"}
         placeholder={isPublic ? "Public" : "Private"}
+        label="Select Public/Private ?"
       />
-      <Form.TextArea
-        fluid
-        name="invited"
-        placeholder="Enrolled Researchers"
-        onChange={(event) => {
-          setenrolled((prevState) => [event.target.value, ...prevState]);
-        }}
-        value={enrolled.join("\n")}
-      />
+      <Button>Update Form</Button>
     </Form>
   );
 };

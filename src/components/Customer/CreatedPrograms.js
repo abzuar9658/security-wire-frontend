@@ -1,15 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Container, Loader, Table } from "semantic-ui-react";
+import {
+  Container,
+  Loader,
+  Table,
+  Dropdown,
+  Button,
+  Icon,
+} from "semantic-ui-react";
+import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { loadCreatedPrograms } from "../../actions";
+import {
+  loadCreatedPrograms,
+  deleteProgram,
+  clearDeletedProgram,
+  updateProgram,
+  getSecurityResearchers,
+} from "../../actions/customerActions";
 import MyModal from "../MyModal";
 
 const CreatedPrograms = () => {
   const programs = useSelector((state) => state.createdPrograms);
+  const deletedProgram = useSelector((state) => state.deleteProgram);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadCreatedPrograms());
-  }, [programs.data && programs.data.data && programs.data.data.results]);
+  }, [
+    programs.data && programs.data.data && programs.data.data.results,
+    deletedProgram.isSuccess,
+  ]);
 
   if (programs.isLoading) return <Loader active />;
   if (programs.isError) return <h3>{programs.errorMessage}</h3>;
@@ -32,7 +51,7 @@ const CreatedPrograms = () => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {programs.data.program.map((program, index) => {
+            {programs.data.program.reverse().map((program, index) => {
               return (
                 <Table.Row key={program._id}>
                   <Table.Cell>{index + 1}</Table.Cell>
@@ -47,13 +66,41 @@ const CreatedPrograms = () => {
                   <Table.Cell>{program.enrolled.length}</Table.Cell>
                   <Table.Cell>{program.invited.length}</Table.Cell>
                   <Table.Cell>
-                    <MyModal
-                      component="programform"
-                      header="Update Program"
-                      data={program}
-                      color="red"
-                      size="mini"
-                    />
+                    <Dropdown text="Actions">
+                      <Dropdown.Menu>
+                        <Dropdown.Item text="Update">
+                          <MyModal
+                            data={program}
+                            component="programform"
+                            header="Update program"
+                            color="green">
+                            <Dropdown.Item>
+                              {" "}
+                              <Icon name="add" color="green" />
+                              Update Program
+                            </Dropdown.Item>
+                          </MyModal>
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          disabled={deletedProgram.isLoading}
+                          onClick={() => dispatch(deleteProgram(program._id))}>
+                          <Icon name="delete" color="red" />
+                          Delete program
+                        </Dropdown.Item>
+                        <Dropdown.Item>
+                          {console.log("PROGRAM ID", program._id)}
+                          <MyModal
+                            component="invite-researchers"
+                            header="Invite Researchers"
+                            programId={program._id}>
+                            <Dropdown.Item>
+                              <Icon name="mail" />
+                              Invite Researchers
+                            </Dropdown.Item>
+                          </MyModal>
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </Table.Cell>
                 </Table.Row>
               );

@@ -19,10 +19,10 @@ export default class InputSelect extends Component {
   };
   handleChange = (value, actionMeta) => {
     console.group("Value Changed");
-    console.log(value);
     console.log(`action: ${actionMeta.action}`);
     console.groupEnd();
     this.setState({ value });
+    console.log("VALUE 1", this.state.value);
   };
   handleInputChange = (inputValue) => {
     this.setState({ inputValue });
@@ -34,12 +34,12 @@ export default class InputSelect extends Component {
       case "Enter":
       case "Tab":
         console.group("Value Added");
-        console.log(value);
         console.groupEnd();
         this.setState({
           inputValue: "",
           value: [...value, createOption(inputValue)],
         });
+        console.log("VALUE: ", value);
         event.preventDefault();
     }
   };
