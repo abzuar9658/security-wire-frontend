@@ -1,7 +1,6 @@
 import React from "react";
-
 const Researcher = () => {
-  return <div>Researcher Homepage</div>;
+  return <div></div>;
 };
 
 export default Researcher;

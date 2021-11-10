@@ -7,7 +7,6 @@ import {
   Button,
   Icon,
 } from "semantic-ui-react";
-import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
   loadCreatedPrograms,
@@ -17,12 +16,13 @@ import {
   getSecurityResearchers,
 } from "../../actions/customerActions";
 import MyModal from "../MyModal";
+import { useHistory } from "react-router-dom";
 
 const CreatedPrograms = () => {
   const programs = useSelector((state) => state.createdPrograms);
   const deletedProgram = useSelector((state) => state.deleteProgram);
   const dispatch = useDispatch();
-
+  const history = useHistory();
   useEffect(() => {
     dispatch(loadCreatedPrograms());
   }, [
@@ -37,7 +37,7 @@ const CreatedPrograms = () => {
       <h4>All Created Programs</h4>
       {!programs.isSuccess === true ? <Loader active /> : null}
       {programs.isSuccess && (
-        <Table>
+        <Table celled selectable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Sr #.</Table.HeaderCell>
@@ -53,7 +53,14 @@ const CreatedPrograms = () => {
           <Table.Body>
             {programs.data.program.reverse().map((program, index) => {
               return (
-                <Table.Row key={program._id}>
+                <Table.Row
+                  key={program._id}
+                  onClick={() =>
+                    history.push({
+                      pathname: "/customer/createProgram",
+                      program,
+                    })
+                  }>
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>{program.title}</Table.Cell>
                   <Table.Cell>{program.date}</Table.Cell>
@@ -61,26 +68,25 @@ const CreatedPrograms = () => {
                     {program.isApproved ? "Yes" : "Pending"}
                   </Table.Cell>
                   <Table.Cell>
-                    {program.isPublic ? "Public" : "Private"}
+                    {program.ispublic ? "Public" : "Private"}
                   </Table.Cell>
                   <Table.Cell>{program.enrolled.length}</Table.Cell>
                   <Table.Cell>{program.invited.length}</Table.Cell>
                   <Table.Cell>
                     <Dropdown text="Actions">
                       <Dropdown.Menu>
-                        <Dropdown.Item text="Update">
-                          <MyModal
-                            data={program}
-                            component="programform"
-                            header="Update program"
-                            color="green">
-                            <Dropdown.Item>
-                              {" "}
-                              <Icon name="add" color="green" />
-                              Update Program
-                            </Dropdown.Item>
-                          </MyModal>
+                        <Dropdown.Item
+                          onClick={() =>
+                            history.push({
+                              pathname: "/customer/createProgram",
+                              program,
+                            })
+                          }>
+                          {" "}
+                          <Icon name="add" color="green" />
+                          Update Program
                         </Dropdown.Item>
+
                         <Dropdown.Item
                           disabled={deletedProgram.isLoading}
                           onClick={() => dispatch(deleteProgram(program._id))}>

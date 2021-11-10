@@ -12,17 +12,29 @@ const createOption = (label) => ({
   value: label,
 });
 
-export default class InputSelect extends Component {
+export class InScopeLinks extends Component {
   state = {
     inputValue: "",
     value: [],
   };
+  componentDidMount() {
+    if (Array.isArray(this.props.defaultValue)) {
+      this.setState({ value: [...this.props.defaultValue] });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== this.props) {
+      if (Array.isArray(this.props.defaultValue)) {
+        this.setState({ value: [...this.props.defaultValue] });
+      }
+    }
+  }
   handleChange = (value, actionMeta) => {
     console.group("Value Changed");
     console.log(`action: ${actionMeta.action}`);
     console.groupEnd();
     this.setState({ value });
-    console.log("VALUE 1", this.state.value);
+    this.props.setinScopeLinks(value);
   };
   handleInputChange = (inputValue) => {
     this.setState({ inputValue });
@@ -39,12 +51,146 @@ export default class InputSelect extends Component {
           inputValue: "",
           value: [...value, createOption(inputValue)],
         });
-        console.log("VALUE: ", value);
+        this.props.setinScopeLinks([...value, createOption(inputValue)]);
+
         event.preventDefault();
     }
   };
   render() {
     const { inputValue, value } = this.state;
+    return (
+      <>
+        <CreatableSelect
+          components={components}
+          inputValue={inputValue}
+          isClearable
+          isMulti
+          menuIsOpen={false}
+          onChange={this.handleChange}
+          onInputChange={this.handleInputChange}
+          onKeyDown={this.handleKeyDown}
+          placeholder={this.props.placeholder}
+          value={value}
+        />
+        <br />
+      </>
+    );
+  }
+}
+
+export class OutScopeLinks extends Component {
+  state = {
+    inputValue: "",
+    value: [],
+  };
+  componentDidMount() {
+    if (Array.isArray(this.props.defaultValue)) {
+      this.setState({ value: [...this.props.defaultValue] });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== this.props) {
+      if (Array.isArray(this.props.defaultValue)) {
+        this.setState({ value: [...this.props.defaultValue] });
+      }
+    }
+  }
+  handleChange = (value, actionMeta) => {
+    console.group("Value Changed");
+    console.log(`action: ${actionMeta.action}`);
+    console.groupEnd();
+    this.setState({ value });
+    this.props.setoutScopeLinks(value);
+  };
+  handleInputChange = (inputValue) => {
+    this.setState({ inputValue });
+  };
+  handleKeyDown = (event) => {
+    const { inputValue, value } = this.state;
+    if (!inputValue) return;
+    switch (event.key) {
+      case "Enter":
+      case "Tab":
+        console.group("Value Added");
+        console.groupEnd();
+        this.setState({
+          inputValue: "",
+          value: [...value, createOption(inputValue)],
+        });
+        this.props.setoutScopeLinks([...value, createOption(inputValue)]);
+
+        event.preventDefault();
+    }
+  };
+  render() {
+    const { inputValue, value } = this.state;
+    return (
+      <>
+        <CreatableSelect
+          components={components}
+          inputValue={inputValue}
+          isClearable
+          isMulti
+          menuIsOpen={false}
+          onChange={this.handleChange}
+          onInputChange={this.handleInputChange}
+          onKeyDown={this.handleKeyDown}
+          placeholder={this.props.placeholder}
+          value={value}
+        />
+        <br />
+      </>
+    );
+  }
+}
+
+export class VRTs extends Component {
+  state = {
+    inputValue: "",
+    value: [],
+  };
+  componentDidMount() {
+    if (Array.isArray(this.props.defaultValue)) {
+      this.setState({ value: [...this.props.defaultValue] });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== this.props) {
+      if (Array.isArray(this.props.defaultValue)) {
+        this.setState({ value: [...this.props.defaultValue] });
+      }
+    }
+  }
+  handleChange = (value, actionMeta) => {
+    console.group("Value Changed");
+    console.log(`action: ${actionMeta.action}`);
+    console.groupEnd();
+    this.setState({ value });
+    this.props.setvrts(value);
+  };
+  handleInputChange = (inputValue) => {
+    this.setState({ inputValue });
+  };
+  handleKeyDown = (event) => {
+    const { inputValue, value } = this.state;
+    if (!inputValue) return;
+    switch (event.key) {
+      case "Enter":
+      case "Tab":
+        console.group("Value Added");
+        console.groupEnd();
+        this.setState({
+          inputValue: "",
+          value: [...value, createOption(inputValue)],
+        });
+        this.props.setvrts([...value, createOption(inputValue)]);
+
+        event.preventDefault();
+    }
+  };
+  render() {
+    const { inputValue, value } = this.state;
+    console.log("DEFAILT VALUE", this.props.defaultValue);
     return (
       <>
         <CreatableSelect

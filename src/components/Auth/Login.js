@@ -27,8 +27,9 @@ const Login = () => {
       setsuccess(true);
       setloading(false);
       if (auth.data) {
+        console.log("OBESERVER: ", auth.data.data.user.role);
         localStorage.setItem("token", auth.data.token);
-        history.push("/");
+        history.push(`/${auth.data.data.user.role}/createdPrograms`);
       }
     }
     if (auth.isError) {
@@ -40,13 +41,7 @@ const Login = () => {
     }
   }, [auth]);
   const displayErrors = (errors) =>
-    errors.map((error, i) => (
-      <p key={i}>
-        {error.message.includes("401")
-          ? "Invalid email or password"
-          : error.message}
-      </p>
-    ));
+    errors.map((error, i) => <p key={i}>{error.message}</p>);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -70,8 +65,7 @@ const Login = () => {
     <Grid
       textAlign="center"
       verticalAlign="middle"
-      className={classes.background}
-    >
+      className={classes.background}>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as="h1" icon color="violet" textAlign="center">
           <Icon name="code branch" color="violet" />
@@ -112,8 +106,7 @@ const Login = () => {
               className={loading ? "loading" : ""}
               color="violet"
               fluid
-              size="large"
-            >
+              size="large">
               Submit
             </Button>
           </Segment>

@@ -8,23 +8,16 @@ import { useHistory } from "react-router-dom";
 //TODO//View created Programs
 //TODO: Create new Programs -validation -multiselect
 //TODO: Update Programs
-//TODO: Invite Researcher to a Programs
-//TODO: Delete Programs
+//TODO//Invite Researcher to a Programs
+//TODO// Delete Programs
 
-const Customer = ({ name }) => {
+const Customer = () => {
   const history = useHistory();
   return (
     <Container>
       <br />
-      <h1 className="centered">Customer Dashboard</h1>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button onClick={() => history.push("/createProgram")} color="green">
-          Create New Program
-        </Button>
-      </div>
-      <h2>Welcome {name}</h2>
-      <CreatedPrograms />
       <br />
+      <CreatedPrograms />
     </Container>
   );
 };

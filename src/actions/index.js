@@ -20,7 +20,7 @@ export const login = (body) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: actionTypes.LOGIN_LOAD_FAIL,
-      payload: error.message,
+      payload: error.response.data.message,
     });
   }
 };
@@ -37,7 +37,7 @@ export const register = (body) => async (dispatch) => {
   try {
     const res = await axios.post(`${API}/users/signup`, {
       email,
-      userName: username,
+      name: username,
       password,
       passwordConfirm: passwordConfirmation,
       role,
@@ -47,6 +47,7 @@ export const register = (body) => async (dispatch) => {
       payload: res,
     });
   } catch (error) {
+    console.log(error.response);
     dispatch({
       type: actionTypes.REGISTER_LOAD_FAIL,
       payload: error.message,

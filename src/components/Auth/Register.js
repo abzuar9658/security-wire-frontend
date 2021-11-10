@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   Form,
@@ -7,18 +7,48 @@ import {
   Header,
   Message,
   Icon,
-  Select,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import Select from "react-select";
+import { register } from "../../actions";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
+const roleOptions = [
+  { label: "Customer", value: "customer" },
+  { label: "Security Researcher", value: "security-researcher" },
+];
 const Register = () => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const [success, setsuccess] = useState(false);
+  const history = useHistory();
   const [username, setusername] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [passwordConfirmation, setpasswordConfirmation] = useState("");
   const [errors, seterrors] = useState([]);
   const [loading, setloading] = useState(false);
-  const [role, setrole] = useState("");
+  const [role, setrole] = useState({ value: "customer", label: "Customer" });
+
+  useEffect(() => {
+    if (auth.isSuccess) {
+      setsuccess(true);
+      setloading(false);
+      if (auth.data) {
+        console.log("OBESERVER: ", auth.data.data.user.role);
+        localStorage.setItem("token", auth.data.token);
+        history.push(`/${auth.data.data.user.role}/createdPrograms`);
+      }
+    }
+    if (auth.isError) {
+      let errors = [];
+      let error;
+      error = { message: auth.errorMessage };
+      seterrors(errors.concat(error));
+      setloading(false);
+    }
+  }, [auth]);
 
   const isFormValid = () => {
     let errors = [];
@@ -64,6 +94,15 @@ const Register = () => {
     if (isFormValid()) {
       seterrors([]);
       setloading(true);
+      dispatch(
+        register({
+          username,
+          email,
+          role: role.value,
+          password,
+          passwordConfirmation,
+        })
+      );
     }
   };
   const handleInputError = (errors, inputName) => {
@@ -105,17 +144,19 @@ const Register = () => {
               className={handleInputError(errors, "email")}
               type="email"
             />
-            <Form.Input
-              fluid
-              name="role"
-              icon="clipboard list"
-              iconPosition="left"
-              placeholder="Enter role"
-              onChange={(event) => setrole(event.target.value)}
-              value={role}
-              className={handleInputError(errors, "email")}
-              type="role"
-            />
+            <div style={{ textAlign: "left", marginBottom: "10px" }}>
+              <Select
+                label="Select Role"
+                defaultValue={[roleOptions[0], roleOptions[0]]}
+                name="role"
+                placeholder={"Select Role"}
+                options={roleOptions}
+                onChange={(e) => {
+                  console.log(e.value);
+                  setrole(e.value);
+                }}
+              />
+            </div>
             <Form.Input
               fluid
               name="password"
@@ -145,8 +186,7 @@ const Register = () => {
               className={loading ? "loading" : ""}
               color="orange"
               fluid
-              size="large"
-            >
+              size="large">
               Submit
             </Button>
           </Segment>

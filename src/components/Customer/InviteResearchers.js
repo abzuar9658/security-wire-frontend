@@ -10,24 +10,42 @@ import {
 const animatedComponents = makeAnimated();
 
 export default function InviteResearchers({ programId, toggleModal }) {
-  console.log("PROGRAM ID INVITATION", programId);
   const [options, setOptions] = useState([]);
   const dispatch = useDispatch();
   const researchers = useSelector((state) => state.inviteResearchers);
-  let selectedResearchers = [];
+  const programs = useSelector((state) => state.createdPrograms);
+  let [selectedResearchers, setselectedResearchers] = useState([]);
   useEffect(() => {
+    const program =
+      programs.isSuccess &&
+      programs.data.program.find((program) => program._id === programId);
+    console.log("PROGRAM FOUND", program, program.invited);
+    setselectedResearchers(program.invited);
     dispatch(getSecurityResearchers())
       .then((res) => {
-        console.log("RESPONSE: ", res);
+        //console.log("RESPONSE: ", res);
         let optionsLocal = res.users.map((user) => ({
           value: user._id,
           label: user.name.charAt(0).toUpperCase() + user.name.slice(1),
         }));
+        const selected =
+          program &&
+          optionsLocal.map((option) => {
+            if (program.invited.includes(option.value.toString())) {
+              return option;
+            }
+          });
+        optionsLocal = optionsLocal.filter(
+          (option) => !program.invited.includes(option.value)
+        );
+        console.log("SELECTED, OPTIONS", selected, optionsLocal);
+        setselectedResearchers([...selected]);
         setOptions([...optionsLocal]);
       })
       .catch((err) => console.error(err.message));
-  }, []);
+  }, [programs]);
   const handleChange = (e) => {
+    console.log("I am changed", e);
     selectedResearchers = e.map((event) => event.value);
   };
   const handleSubmit = () => {
@@ -41,7 +59,7 @@ export default function InviteResearchers({ programId, toggleModal }) {
       <Select
         closeMenuOnSelect={false}
         components={animatedComponents}
-        defaultValue={[]}
+        value={selectedResearchers}
         isMulti
         options={options}
         onChange={(e) => handleChange(e)}
