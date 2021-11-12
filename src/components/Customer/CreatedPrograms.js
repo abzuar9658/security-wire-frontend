@@ -94,7 +94,6 @@ const CreatedPrograms = () => {
                           Delete program
                         </Dropdown.Item>
                         <Dropdown.Item>
-                          {console.log("PROGRAM ID", program._id)}
                           <MyModal
                             component="invite-researchers"
                             header="Invite Researchers"

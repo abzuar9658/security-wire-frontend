@@ -68,8 +68,7 @@ const Login = () => {
       className={classes.background}>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as="h1" icon color="violet" textAlign="center">
-          <Icon name="code branch" color="violet" />
-          Login to Contegris Airways
+          Login to Here
         </Header>
         <Form onSubmit={handleSubmit} size="large" autoComplete="off">
           <Segment stacked>

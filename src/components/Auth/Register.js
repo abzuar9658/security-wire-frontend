@@ -94,11 +94,12 @@ const Register = () => {
     if (isFormValid()) {
       seterrors([]);
       setloading(true);
+      //console.log("ROLE: ", role);
       dispatch(
         register({
           username,
           email,
-          role: role.value,
+          role,
           password,
           passwordConfirmation,
         })
@@ -117,8 +118,7 @@ const Register = () => {
     <Grid textAlign="center" verticalAlign="middle" className="app">
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as="h1" icon color="orange" textAlign="center">
-          <Icon name="puzzle piece" color="orange" />
-          Register for Contegris Airways
+          Register here
         </Header>
         <Form onSubmit={handleSubmit} size="large">
           <Segment stacked>
