@@ -94,12 +94,12 @@ const Register = () => {
     if (isFormValid()) {
       seterrors([]);
       setloading(true);
-      //console.log("ROLE: ", role);
+      console.log("ROLE: ", role);
       dispatch(
         register({
           username,
           email,
-          role,
+          role: role.value,
           password,
           passwordConfirmation,
         })
@@ -153,7 +153,7 @@ const Register = () => {
                 options={roleOptions}
                 onChange={(e) => {
                   console.log(e.value);
-                  setrole(e.value);
+                  setrole(e);
                 }}
               />
             </div>

@@ -50,7 +50,7 @@ export const register = (body) => async (dispatch) => {
     console.log(error.response);
     dispatch({
       type: actionTypes.REGISTER_LOAD_FAIL,
-      payload: error.message,
+      payload: error.response.data.message,
     });
   }
 };
