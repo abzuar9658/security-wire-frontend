@@ -20,7 +20,7 @@ export const login = (body) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: actionTypes.LOGIN_LOAD_FAIL,
-      payload: error.response.data.message,
+      payload: error.response ? error.response.data.message : error.message,
     });
   }
 };
@@ -50,7 +50,7 @@ export const register = (body) => async (dispatch) => {
     console.log(error.response);
     dispatch({
       type: actionTypes.REGISTER_LOAD_FAIL,
-      payload: error.response.data.message,
+      payload: error.response ? error.response.data.message : error.message,
     });
   }
 };

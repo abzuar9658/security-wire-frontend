@@ -29,7 +29,9 @@ const Login = () => {
       if (auth.data) {
         console.log("OBESERVER: ", auth.data.data.user.role);
         localStorage.setItem("token", auth.data.token);
-        history.push(`/${auth.data.data.user.role}/createdPrograms`);
+        auth.data.data.user.role === "customer"
+          ? history.push(`/customer/createdPrograms`)
+          : history.push(`/researcher/enrolled`);
       }
     }
     if (auth.isError) {
@@ -68,7 +70,7 @@ const Login = () => {
       className={classes.background}>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as="h1" icon color="violet" textAlign="center">
-          Login to Here
+          Login here
         </Header>
         <Form onSubmit={handleSubmit} size="large" autoComplete="off">
           <Segment stacked>

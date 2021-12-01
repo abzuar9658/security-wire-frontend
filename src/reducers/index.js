@@ -8,6 +8,12 @@ import {
   inviteResearchersReducer,
   getResearchersReducer,
 } from "./customerReducer";
+import {
+  publicProgramsReducer,
+  invitedProgramsReducer,
+  submittedProgramsReducer,
+  enrolledProgramsReducer,
+} from "./researcherReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -17,6 +23,10 @@ const rootReducer = combineReducers({
   deleteProgram: deleteProgramReducer,
   inviteResearchers: inviteResearchersReducer,
   getResearchers: getResearchersReducer,
+  publicPrograms: publicProgramsReducer,
+  invitedPrograms: invitedProgramsReducer,
+  enrolledPrograms: enrolledProgramsReducer,
+  submittedPrograms: submittedProgramsReducer,
 });
 
 export default rootReducer;

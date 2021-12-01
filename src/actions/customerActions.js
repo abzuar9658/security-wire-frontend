@@ -1,6 +1,9 @@
 import * as actionTypes from "./types";
 import axios from "axios";
 import API from "./api";
+import { showToasterNotification } from "./commonActions";
+import { Intent } from "@blueprintjs/core";
+import { toast } from "react-toastify";
 const programsLoading = () => {
   return {
     type: actionTypes.LOADING_CREATED_PROGRAMS,
@@ -42,7 +45,25 @@ export const createNewProgram = (body) => async (dispatch) => {
       type: actionTypes.CREATE_NEW_PROGRAM_SUCCESS,
       payload: res.data,
     });
+    toast.success("Program created successfully", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   } catch (error) {
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     dispatch({
       type: actionTypes.CREATE_NEW_PROGRAM_FAIL,
       payload: error.message,
@@ -79,10 +100,28 @@ export const updateProgram = (program) => async (dispatch) => {
       type: actionTypes.UPDATE_PROGRAM_SUCCESS,
       payload: res.data,
     });
+    toast.success("Program updated successfully", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   } catch (error) {
     dispatch({
       type: actionTypes.UPDATE_PROGRAM_FAIL,
       payload: error.message,
+    });
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
   }
 };
@@ -108,7 +147,26 @@ export const deleteProgram = (id) => async (dispatch) => {
       type: actionTypes.DELETE_PROGRAM_SUCCESS,
       payload: res.data,
     });
+    toast.success("Program deleted successfully", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    dispatch(loadCreatedPrograms());
   } catch (error) {
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     dispatch({
       type: actionTypes.DELETE_PROGRAM_FAIL,
       payload: error.message,
@@ -137,8 +195,26 @@ export const inviteResearchers = (body, programId) => async (dispatch) => {
       type: actionTypes.INVITE_RESEARCHERS_SUCCESS,
       payload: res.data,
     });
+    toast.success("Researchers invite success", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     dispatch(loadCreatedPrograms());
   } catch (error) {
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     dispatch({
       type: actionTypes.INVITE_RESEARCHERS_FAIL,
       payload: error.message,
@@ -167,6 +243,15 @@ export const getSecurityResearchers = () => async (dispatch) => {
     dispatch({
       type: actionTypes.GET_RESEARCHERS_FAIL,
       payload: error.message,
+    });
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
     return error;
   }

@@ -17,6 +17,8 @@ import {
 } from "../../actions/customerActions";
 import MyModal from "../MyModal";
 import { useHistory } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const CreatedPrograms = () => {
   const programs = useSelector((state) => state.createdPrograms);
@@ -29,7 +31,22 @@ const CreatedPrograms = () => {
     programs.data && programs.data.data && programs.data.data.results,
     deletedProgram.isSuccess,
   ]);
-
+  const handleDelete = (id) => {
+    confirmAlert({
+      title: "Confirm to delete",
+      message: "Are you sure to do delete this program?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => dispatch(deleteProgram(id)),
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
   if (programs.isLoading) return <Loader active />;
   if (programs.isError) return <h3>{programs.errorMessage}</h3>;
   return (
@@ -89,11 +106,11 @@ const CreatedPrograms = () => {
 
                         <Dropdown.Item
                           disabled={deletedProgram.isLoading}
-                          onClick={() => dispatch(deleteProgram(program._id))}>
+                          onClick={() => handleDelete(program._id)}>
                           <Icon name="delete" color="red" />
                           Delete program
                         </Dropdown.Item>
-                        <Dropdown.Item>
+                        <Dropdown.Item disabled={!program.isApproved}>
                           <MyModal
                             component="invite-researchers"
                             header="Invite Researchers"

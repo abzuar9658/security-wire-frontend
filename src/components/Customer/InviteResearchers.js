@@ -16,10 +16,11 @@ export default function InviteResearchers({ programId, toggleModal }) {
   const programs = useSelector((state) => state.createdPrograms);
   let [selectedResearchers, setselectedResearchers] = useState([]);
   useEffect(() => {
+    // console.log("I AM LAODED INVITE");
     const program =
       programs.isSuccess &&
       programs.data.program.find((program) => program._id === programId);
-    console.log("PROGRAM FOUND", program, program.invited);
+    // console.log("PROGRAM FOUND", program, program.invited);
     setselectedResearchers(program.invited);
     dispatch(getSecurityResearchers())
       .then((res) => {
@@ -46,11 +47,17 @@ export default function InviteResearchers({ programId, toggleModal }) {
   }, [programs]);
   const handleChange = (e) => {
     console.log("I am changed", e);
-    selectedResearchers = e.map((event) => event.value);
+    const selectedResearchersLocal = [...e];
+    setselectedResearchers(selectedResearchersLocal);
   };
   const handleSubmit = () => {
     if (selectedResearchers.length > 0) {
-      dispatch(inviteResearchers({ users: selectedResearchers }, programId));
+      // console.log("SELECETED REASEACERSSS", selectedResearchers);
+      const users = selectedResearchers.map(
+        (researcher) => researcher && researcher.value
+      );
+      console.log("INVTIED RESEARCHERS!!", users);
+      dispatch(inviteResearchers({ users }, programId));
       toggleModal();
     }
   };

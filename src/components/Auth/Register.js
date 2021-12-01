@@ -94,7 +94,7 @@ const Register = () => {
     if (isFormValid()) {
       seterrors([]);
       setloading(true);
-      console.log("ROLE: ", role);
+      //console.log("ROLE: ", role);
       dispatch(
         register({
           username,

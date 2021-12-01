@@ -11,6 +11,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router";
 import MyModal from "../MyModal";
 import { Icon } from "semantic-ui-react";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import Tooltip from "@mui/material/Tooltip";
+
 const CreateNewProgram = (props) => {
   const history = useHistory();
   const location = useLocation();
@@ -24,6 +28,26 @@ const CreateNewProgram = (props) => {
   const [inScopeLinks, setinScopeLinks] = useState([]);
   const [outScopeLinks, setoutScopeLinks] = useState([]);
   const [vrts, setvrts] = useState([]);
+
+  const handleDelete = (id) => {
+    confirmAlert({
+      title: "Confirm to delete",
+      message: "Are you sure to do delete this program?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            dispatch(deleteProgram(id));
+            history.push("/customer/createdPrograms");
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
 
   useEffect(() => {
     console.log(location);
@@ -78,7 +102,7 @@ const CreateNewProgram = (props) => {
   useEffect(() => {
     if (createProgram.isSuccess) {
       dispatch(clearSuccess());
-      history.push("/");
+      history.push("/customer/createdPrograms");
     }
   }, [createProgram.isSuccess]);
   const handleSubmit = (e) => {
@@ -87,9 +111,9 @@ const CreateNewProgram = (props) => {
     const outscopelinks =
       outScopeLinks && outScopeLinks.map((link) => link.value);
     const vrt = vrts && vrts.map((link) => link.value);
-
+    console.log("LOCATION:::", location);
     const body = {
-      _id: location && location.program._id,
+      _id: location && location.program && location.program._id,
       title,
       intro,
       detail,
@@ -205,18 +229,18 @@ const CreateNewProgram = (props) => {
               <Button
                 color="red"
                 onClick={() => {
-                  dispatch(deleteProgram(location.program._id));
-                  history.push("/customer/createdPrograms");
+                  handleDelete(location.program._id);
                 }}>
                 <Icon name="delete" />
                 Delete Progam
               </Button>
+
               <MyModal
                 component="invite-researchers"
                 header="Invite Researchers"
                 color="blue"
                 programId={location.program._id}>
-                <Button>
+                <Button disabled={!location.program.isApproved}>
                   <Icon name="mail" />
                   Invite Researchers
                 </Button>
