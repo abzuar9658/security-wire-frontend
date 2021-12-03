@@ -47,8 +47,12 @@ const InvitedPrograms = () => {
           title: pg.title,
           customer: pg.customer.name,
           date: pg.date,
-          inScope: pg.inScope.length,
-          outScope: pg.outScope.length,
+          inScope:
+            pg.inScope &&
+            pg.inScope.map((scope, key) => <p key={key}>{scope}</p>),
+          outScope:
+            pg.outScope &&
+            pg.outScope.map((scope, key) => <p key={key}>{scope}</p>),
           vrt: pg.vrt.length,
           actions: (
             <div style={{ display: "flex" }}>

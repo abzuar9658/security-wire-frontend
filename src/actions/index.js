@@ -24,6 +24,26 @@ export const login = (body) => async (dispatch) => {
     });
   }
 };
+export const verify = () => async (dispatch) => {
+  dispatch(loginLoading());
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    const res = await axios.get(`${API}/users/verify`, config);
+    dispatch({
+      type: actionTypes.LOGIN_LOAD_SUCCESS,
+      payload: res,
+    });
+  } catch (error) {
+    dispatch({
+      type: actionTypes.LOGIN_LOAD_FAIL,
+      payload: error.response ? error.response.data.message : error.message,
+    });
+  }
+};
 
 const registerLoading = () => {
   return {

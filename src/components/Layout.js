@@ -18,9 +18,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import layoutOptions from "./layoutOptions";
-import { logout } from "../actions";
+import { logout, verify } from "../actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import logo from "../assets/logo.png";
+import { Image } from "semantic-ui-react";
 const drawerWidth = 240;
 
 function Layout(props) {
@@ -37,6 +39,9 @@ function Layout(props) {
   const [dashboard, setdashboard] = useState(null);
 
   useEffect(() => {
+    if (auth.data && !auth.data.data && localStorage.getItem("token")) {
+      dispatch(verify());
+    }
     if (auth.data && auth.data.data && auth.data.data.user) {
       const user = auth.data.data.user.role;
       let dashboardLocal = layoutOptions.filter(
@@ -140,6 +145,7 @@ function Layout(props) {
                   <MenuItem
                     onClick={() => {
                       dispatch(logout());
+                      localStorage.removeItem("token");
                       history.push("/login");
                     }}>
                     <span style={{ display: "flex", verticalAlign: "middle" }}>
@@ -174,8 +180,10 @@ function Layout(props) {
               width: drawerWidth,
             },
           }}>
-          <img
-            src="security-wire-logo.png"
+          {console.log("LOGO IMAGE", logo)}
+          <Image
+            src={logo}
+            alt="image"
             width="100px"
             style={{ margin: "0 auto", marginTop: "10px" }}
           />
@@ -193,7 +201,7 @@ function Layout(props) {
           }}
           open>
           <img
-            src="security-wire-logo.png"
+            src={logo}
             width="100px"
             style={{ margin: "0 auto", marginTop: "10px" }}
           />

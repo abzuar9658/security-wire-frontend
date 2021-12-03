@@ -14,6 +14,12 @@ import {
   submittedProgramsReducer,
   enrolledProgramsReducer,
 } from "./researcherReducer";
+import {
+  programsAprroveReducer,
+  submissionsAprroveReducer,
+  researchersReducer,
+  customersReducer,
+} from "./adminReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -27,6 +33,10 @@ const rootReducer = combineReducers({
   invitedPrograms: invitedProgramsReducer,
   enrolledPrograms: enrolledProgramsReducer,
   submittedPrograms: submittedProgramsReducer,
+  programsApproval: programsAprroveReducer,
+  submissionsApproval: submissionsAprroveReducer,
+  allResearchers: researchersReducer,
+  allCustomers: customersReducer,
 });
 
 export default rootReducer;

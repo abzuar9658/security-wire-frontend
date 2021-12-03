@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./Auth/Login";
 import Register from "./Auth/Register";
 import Customer from "./Customer/Customer";
@@ -10,8 +11,23 @@ import InvitedPrograms from "./Researcher/Invitations";
 import PublicPrograms from "./Researcher/PublicPrograms";
 import SubmittedPrograms from "./Researcher/Submissions";
 import EnrolledPrograms from "./Researcher/EnrolledPrograms";
+import ProgramsApproval from "./Admin/ProgramsApproval";
+import SubmissionsApproval from "./Admin/SubmissionsApproval";
+import Researchers from "./Admin/Researchers";
+import Customers from "./Admin/Customers";
+import { verify } from "../actions";
+import { useDispatch } from "react-redux";
 function App() {
   const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   console.log(auth);
+  //   if (!auth.isSuccess && !auth.data) {
+  //     if (localStorage.getItem("token")) {
+  //       dispatch(verify());
+  //     }
+  //   }
+  // }, [auth]);
   return (
     <Router>
       <Layout>
@@ -33,6 +49,18 @@ function App() {
           </Route>
           <Route exact path="/researcher/submissions">
             <SubmittedPrograms />
+          </Route>
+          <Route path="/admin/programApproval">
+            <ProgramsApproval />
+          </Route>
+          <Route path="/admin/submissionApproval">
+            <SubmissionsApproval />
+          </Route>
+          <Route path="/admin/researchers">
+            <Researchers />
+          </Route>
+          <Route path="/admin/customers">
+            <Customers />
           </Route>
           <Route path="/login">
             <Login />

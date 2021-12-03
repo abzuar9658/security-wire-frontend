@@ -238,15 +238,22 @@ export const downloadFile = (data) => async (dispatch) => {
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        responseType: "blob",
       },
+      responseType: "blob",
     };
     axios
       .post(`${API}/submissions/download`, data, config)
       .then((response) => {
         if (response.status === 200) {
           console.log("RESPONSE from server", response);
-          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const base64Data = response.data;
+          var arrBuffer = base64ToArrayBuffer(base64Data);
+          var newBlob = new Blob([arrBuffer], { type: "application/pdf" });
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+          const url = window.URL.createObjectURL(newBlob);
           const link = document.createElement("a");
           link.href = url;
           link.setAttribute("download", "file.pdf");
@@ -275,4 +282,15 @@ export const downloadFile = (data) => async (dispatch) => {
     //   payload: res.data,
     // });
   } catch (error) {}
+};
+
+const base64ToArrayBuffer = (data) => {
+  // var binaryString = window.atob(data);
+  // var binaryLen = binaryString.length;
+  // var bytes = new Uint8Array(binaryLen);
+  // for (var i = 0; i < binaryLen; i++) {
+  //   var ascii = binaryString.charCodeAt(i);
+  //   bytes[i] = ascii;
+  // }
+  return data;
 };

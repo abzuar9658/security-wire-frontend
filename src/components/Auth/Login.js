@@ -31,6 +31,8 @@ const Login = () => {
         localStorage.setItem("token", auth.data.token);
         auth.data.data.user.role === "customer"
           ? history.push(`/customer/createdPrograms`)
+          : auth.data.data.user.role === "admin"
+          ? history.push(`/admin/programApproval`)
           : history.push(`/researcher/enrolled`);
       }
     }
