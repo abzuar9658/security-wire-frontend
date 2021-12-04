@@ -18,6 +18,7 @@ export const login = (body) => async (dispatch) => {
       payload: res,
     });
   } catch (error) {
+    console.error(error.response);
     dispatch({
       type: actionTypes.LOGIN_LOAD_FAIL,
       payload: error.response ? error.response.data.message : error.message,

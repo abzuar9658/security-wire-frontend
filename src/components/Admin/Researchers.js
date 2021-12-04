@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getResearchers } from "../../actions/adminActions";
+import {
+  getResearchers,
+  suspendUser,
+  unSuspendUser,
+} from "../../actions/adminActions";
 import { Accordion, Icon, Button } from "semantic-ui-react";
-import { getContrastRatio } from "@mui/material";
+
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 const Researchers = () => {
   const dispatch = useDispatch();
   const [activeIndex, setactiveIndex] = useState(null);
   const researchers = useSelector((state) => state.allResearchers);
+  const [isLoading, setisLoading] = useState(false);
+
   useEffect(() => {
     if (!researchers.isSuccess && !researchers.isError) {
       dispatch(getResearchers());
@@ -20,6 +28,48 @@ const Researchers = () => {
     const { index } = titleProps;
     const newIndex = activeIndex === index ? -1 : index;
     setactiveIndex(newIndex);
+  };
+  const handleSuspend = (user) => {
+    confirmAlert({
+      title: "Confirm to Suspend",
+      message: "Are you sure to do suspend this researcher?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            setisLoading(true);
+            dispatch(suspendUser(user)).then((res) => {
+              setisLoading(false);
+            });
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
+  const handleUnsuspend = (user) => {
+    confirmAlert({
+      title: "Confirm to Un-suspend",
+      message: "Are you sure to do un-suspend this researcher?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            setisLoading(true);
+            dispatch(unSuspendUser(user)).then((res) => {
+              setisLoading(false);
+            });
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
   };
   return (
     <>
@@ -57,7 +107,23 @@ const Researchers = () => {
                   <strong>Programs Submitted: </strong>
                   {researcher.programsSubmitted.length}
                 </p>
-                <Button color="red">Suspend</Button>
+                {researcher.isSuspended ? (
+                  <>
+                    <Button
+                      loading={isLoading}
+                      color="blue"
+                      onClick={() => handleUnsuspend(researcher)}>
+                      Unsuspend
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    loading={isLoading}
+                    color="red"
+                    onClick={() => handleSuspend(researcher)}>
+                    Suspend
+                  </Button>
+                )}
               </Accordion.Content>
             </>
           ))}

@@ -7,7 +7,7 @@ import {
   downloadFile,
 } from "../../actions/researcherActions";
 import { Loader, List, Button } from "semantic-ui-react";
-import { useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import classes from "./researcher.module.css";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -48,13 +48,14 @@ const SubmittedPrograms = () => {
           sr: idx + 1,
           programId: pg.programId && pg.programId.title,
           poc: (
-            <span
+            <NavLink
+              to="/researcher/submissions"
               onClick={() => {
                 const data = { fileName: pg.poc };
                 dispatch(downloadFile(data));
               }}>
               {pg.poc}
-            </span>
+            </NavLink>
           ),
           isApproved: pg.isApproved,
           actions: (

@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import {
   submissionsToApprove,
   approveSubmission,
 } from "../../actions/adminActions";
+import { downloadFile } from "../../actions/researcherActions";
 import MaterialTable from "material-table";
 import { Button } from "semantic-ui-react";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+
 const columns = [
   { title: "Program Title", field: "title" },
-  { title: "Company Name", field: "customer" },
+  { title: "Researcher", field: "researcher" },
   { title: "Proof of Concept", field: "poc" },
   { title: "Action", field: "action" },
 ];
@@ -19,7 +23,7 @@ const SubmissionsApproval = () => {
   const history = useHistory();
   const [data, setdata] = useState([]);
   const submissionsApproval = useSelector((state) => state.submissionsApproval);
-
+  const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     console.log("TOKEN", localStorage.getItem("token"));
     if (!localStorage.getItem("token")) {
@@ -40,15 +44,27 @@ const SubmissionsApproval = () => {
         submissionsApproval.data.submissions &&
         submissionsApproval.data.submissions.map((sb, idx) => ({
           title: sb.programId.title,
-          customer: sb.researcherId.name,
-          poc: sb.poc,
+          researcher:
+            sb.researcherId.name.charAt(0).toUpperCase() +
+            sb.researcherId.name.slice(1),
+          poc: (
+            <NavLink
+              to="/admin/submissionApproval"
+              onClick={() => {
+                const data = { fileName: sb.poc };
+                dispatch(downloadFile(data));
+              }}>
+              {sb.poc}
+            </NavLink>
+          ),
           action: (
             <>
               <Button
+                loading={isLoading}
                 color="blue"
                 onClick={() => {
-                  console.log(sb._id);
-                  dispatch(approveSubmission(sb._id));
+                  // console.log(sb._id);
+                  handleApprove(sb._id);
                 }}>
                 Approve
               </Button>
@@ -60,6 +76,27 @@ const SubmissionsApproval = () => {
       setdata(submissions);
     }
   }, [submissionsApproval]);
+  const handleApprove = (id) => {
+    confirmAlert({
+      title: "Confirm to Approve",
+      message: "Are you sure to approve this program?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            setisLoading(true);
+            dispatch(approveSubmission(id)).then((res) => {
+              setisLoading(false);
+            });
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
   return (
     <MaterialTable
       columns={columns}
