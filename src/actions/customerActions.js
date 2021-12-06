@@ -57,7 +57,7 @@ export const createNewProgram = (body) => async (dispatch) => {
   } catch (error) {
     toast.error(error.response ? error.response.data.message : error.message, {
       position: "top-right",
-      autoClose: 5000,
+      autoClose: 7500,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,

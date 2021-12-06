@@ -6,6 +6,7 @@ import {
   Dropdown,
   Button,
   Icon,
+  Modal,
 } from "semantic-ui-react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -15,11 +16,13 @@ import {
   updateProgram,
   getSecurityResearchers,
 } from "../../actions/customerActions";
+import { downloadFile } from "../../actions/researcherActions";
 import MyModal from "../MyModal";
-import { useHistory } from "react-router-dom";
+import { useHistory, NavLink } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
+import MaterialTable from "material-table";
+import Payment from "./Payment";
 const CreatedPrograms = () => {
   const programs = useSelector((state) => state.createdPrograms);
   const deletedProgram = useSelector((state) => state.deleteProgram);
@@ -64,6 +67,7 @@ const CreatedPrograms = () => {
               <Table.HeaderCell>Visiblity</Table.HeaderCell>
               <Table.HeaderCell>Enrolled Researchers</Table.HeaderCell>
               <Table.HeaderCell>Invited Researchers</Table.HeaderCell>
+              <Table.HeaderCell>Submissions</Table.HeaderCell>
               <Table.HeaderCell>Actions</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -89,6 +93,8 @@ const CreatedPrograms = () => {
                   </Table.Cell>
                   <Table.Cell>{program.enrolled.length}</Table.Cell>
                   <Table.Cell>{program.invited.length}</Table.Cell>
+                  <Table.Cell>{program.submissions.length}</Table.Cell>
+
                   <Table.Cell>
                     <Dropdown text="Actions">
                       <Dropdown.Menu>
@@ -99,7 +105,6 @@ const CreatedPrograms = () => {
                               program,
                             })
                           }>
-                          {" "}
                           <Icon name="add" color="green" />
                           Update Program
                         </Dropdown.Item>
@@ -110,6 +115,7 @@ const CreatedPrograms = () => {
                           <Icon name="delete" color="red" />
                           Delete program
                         </Dropdown.Item>
+                        <SubmissionsModal program={program} />
                         <Dropdown.Item disabled={!program.isApproved}>
                           <MyModal
                             component="invite-researchers"
@@ -135,3 +141,69 @@ const CreatedPrograms = () => {
 };
 
 export default CreatedPrograms;
+
+const columns = [
+  { title: "Name", field: "researcher" },
+  { title: "Proof of Concept", field: "poc" },
+  { title: "Action", field: "action" },
+];
+
+function SubmissionsModal({ program }) {
+  const [open, setOpen] = React.useState(false);
+  const [data, setdata] = useState([]);
+  const dispatch = useDispatch();
+  const [isLoading, setisLoading] = useState(false);
+  useEffect(() => {
+    if (program.submissions) {
+      const submissions = program.submissions.map((sb, idx) => ({
+        researcher:
+          sb.researcherId.name.charAt(0).toUpperCase() +
+          sb.researcherId.name.slice(1),
+        poc: (
+          <p
+            onClick={() => {
+              const data = { fileName: sb.poc };
+              dispatch(downloadFile(data));
+            }}>
+            {sb.poc}
+          </p>
+        ),
+        action: (
+          <>
+            {/* <Button loading={isLoading} color="blue">
+              Accept Submission
+            </Button> */}
+            <Payment submission={sb} program={program} />
+            <Button color="purple">Chat</Button>
+          </>
+        ),
+      }));
+      console.log(submissions);
+      setdata(submissions);
+    }
+  }, [program]);
+  return (
+    <Modal
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
+      open={open}
+      trigger={
+        <Dropdown.Item disabled={program.submissions.length === 0}>
+          <Icon name="address book" color="grey" />
+          View Submissions
+        </Dropdown.Item>
+      }>
+      <Modal.Header>Submissions for {program.title}</Modal.Header>
+      <Modal.Content>
+        <div style={{ zIndex: 99999999 }}>
+          <MaterialTable
+            columns={columns}
+            data={data}
+            title="Submissions"
+            style={{ widht: "80%" }}
+          />
+        </div>
+      </Modal.Content>
+    </Modal>
+  );
+}

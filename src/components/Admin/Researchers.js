@@ -92,6 +92,22 @@ const Researchers = () => {
                   <Icon name="dropdown" />
                   {researcher.name.charAt(0).toUpperCase() +
                     researcher.name.slice(1)}
+                  {researcher.isSuspended && (
+                    <div
+                      style={{ display: "flex", justifyContent: "flex-end" }}>
+                      <span
+                        style={{
+                          marginRight: "5em",
+                          backgroundColor: "red",
+                          padding: "5px",
+                          borderRadius: "10px",
+                          color: "white",
+                          fontSize: "60%",
+                        }}>
+                        Suspended
+                      </span>
+                    </div>
+                  )}
                 </h2>
               </Accordion.Title>
               <Accordion.Content key={idx} active={activeIndex === idx}>

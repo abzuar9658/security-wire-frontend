@@ -35,6 +35,9 @@ export class InScopeLinks extends Component {
     console.groupEnd();
     this.setState({ value });
     this.props.setinScopeLinks(value);
+    const error = { ...this.props.errors };
+    delete error.inScopeLinks;
+    this.props.seterrors(error);
   };
   handleInputChange = (inputValue) => {
     this.setState({ inputValue });
@@ -167,6 +170,9 @@ export class VRTs extends Component {
     console.groupEnd();
     this.setState({ value });
     this.props.setvrts(value);
+    const error = { ...this.props.errors };
+    delete error.vrts;
+    this.props.seterrors(error);
   };
   handleInputChange = (inputValue) => {
     this.setState({ inputValue });

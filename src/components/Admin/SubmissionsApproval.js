@@ -19,10 +19,10 @@ const columns = [
 ];
 
 const SubmissionsApproval = () => {
-  const dispatch = useDispatch();
   const history = useHistory();
   const [data, setdata] = useState([]);
   const submissionsApproval = useSelector((state) => state.submissionsApproval);
+  const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     console.log("TOKEN", localStorage.getItem("token"));
@@ -35,11 +35,6 @@ const SubmissionsApproval = () => {
     ) {
       dispatch(submissionsToApprove());
     } else {
-      console.log(
-        "submissions",
-        submissionsApproval,
-        submissionsApproval.data.submissions
-      );
       const submissions =
         submissionsApproval.data.submissions &&
         submissionsApproval.data.submissions.map((sb, idx) => ({

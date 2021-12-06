@@ -13,6 +13,8 @@ import MyModal from "../MyModal";
 import { Icon } from "semantic-ui-react";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { ErrorMessage, useFormik } from "formik";
+import * as Yup from "yup";
 import Tooltip from "@mui/material/Tooltip";
 
 const CreateNewProgram = (props) => {
@@ -28,6 +30,34 @@ const CreateNewProgram = (props) => {
   const [inScopeLinks, setinScopeLinks] = useState([]);
   const [outScopeLinks, setoutScopeLinks] = useState([]);
   const [vrts, setvrts] = useState([]);
+  const [errors, seterrors] = useState({});
+
+  // const formik = useFormik({
+  //   initialValues: {
+  //     title: "",
+  //     intro: "",
+  //     detail: "",
+  //     active: false,
+  //     isPublic: false,
+  //     inScopeLinks: [],
+  //     outScopeLinks: [],
+  //     vrt: [],
+  //   },
+  //   validationSchema: Yup.object({
+  //     title: Yup.string()
+  //       .min(5, "Must be atleast 5 characters or more")
+  //       .required("please enter title of the program"),
+  //     active: Yup.string().required("please select program status"),
+  //     isPublic: Yup.string().required("please select program visibility"),
+  //     inScopeLinks: Yup.string().required(
+  //       "atleast one inscope link is required"
+  //     ),
+  //     vrt: Yup.string().required("please enter atleast"),
+  //   }),
+  //   onSubmit: (values) => {
+  //     alert(JSON.stringify(values, null, 2));
+  //   },
+  // });
 
   const handleDelete = (id) => {
     confirmAlert({
@@ -105,6 +135,33 @@ const CreateNewProgram = (props) => {
       history.push("/customer/createdPrograms");
     }
   }, [createProgram.isSuccess]);
+
+  const validateForm = (body) => {
+    seterrors({});
+    if (!body.title.length > 0) {
+      console.log("TITLE", body.title);
+      seterrors((prevState) => ({
+        ...prevState,
+        title: "Please enter program title",
+      }));
+      return false;
+    }
+    if (body.inScope && !body.inScope.length > 0) {
+      seterrors((prevState) => ({
+        ...prevState,
+        inScopeLinks: "Please enter at least one in scope link",
+      }));
+      return false;
+    }
+    if (body.vrt && !body.vrt.length > 0) {
+      seterrors((prevState) => ({
+        ...prevState,
+        vrts: "Please enter at least one vrt",
+      }));
+      return false;
+    }
+    return true;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     const inscopelinks = inScopeLinks && inScopeLinks.map((link) => link.value);
@@ -123,15 +180,14 @@ const CreateNewProgram = (props) => {
       outScope: outscopelinks,
       vrt,
     };
-    Boolean(location.program)
-      ? dispatch(updateProgram(body))
-      : dispatch(createNewProgram(body));
+    const isFormValid = validateForm(body);
+    console.log("FORM VALIDATION", isFormValid, errors);
+    isFormValid && seterrors({});
+    isFormValid &&
+      (Boolean(location.program)
+        ? dispatch(updateProgram(body))
+        : dispatch(createNewProgram(body)));
   };
-  useEffect(() => {
-    console.log("I am inScopeLinks", inScopeLinks);
-    console.log("I am outScopeLinks", outScopeLinks);
-    console.log("I am vrts", vrts);
-  }, [inScopeLinks, outScopeLinks, vrts]);
   return (
     <Container>
       <h2>
@@ -148,11 +204,17 @@ const CreateNewProgram = (props) => {
           iconPosition="left"
           placeholder="Enter Title *"
           onChange={(event) => {
+            const error = { ...errors };
+            delete error.title;
+            seterrors(error);
             settitle(event.target.value);
           }}
           label="Enter program title"
           value={title}
         />
+        {errors.title && (
+          <p style={{ color: "red", marginTop: "-1em" }}>{errors.title}</p>
+        )}
         <Form.Input
           fluid
           name="intro"
@@ -169,13 +231,30 @@ const CreateNewProgram = (props) => {
           placeholder="Enter InScope Links*"
           setinScopeLinks={setinScopeLinks}
           defaultValue={inScopeLinks}
+          errors={errors}
+          seterrors={seterrors}
         />
+        {errors.inScopeLinks && (
+          <p style={{ color: "red", marginTop: "-1em" }}>
+            {errors.inScopeLinks}
+          </p>
+        )}
         <OutScopeLinks
           placeholder="Enter Output Links*"
           setoutScopeLinks={setoutScopeLinks}
           defaultValue={outScopeLinks}
         />
-        <VRTs placeholder="Enter VRTS*" setvrts={setvrts} defaultValue={vrts} />
+
+        <VRTs
+          placeholder="Enter VRTS*"
+          setvrts={setvrts}
+          seterrors={seterrors}
+          errors={errors}
+          defaultValue={vrts}
+        />
+        {errors.vrts && (
+          <p style={{ color: "red", marginTop: "-1em" }}>{errors.vrts}</p>
+        )}
         <Form.TextArea
           fluid
           name="detail"
