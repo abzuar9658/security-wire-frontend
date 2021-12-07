@@ -15,7 +15,7 @@
     "axios": "^0.21.4",
     "downloadjs": "^1.4.7",
     "formik": "^2.2.9",
-    "material-table": "^1.52.0",
+    "material-table": "^1.32.0",
     "md5": "^2.3.0",
     "react": "^17.0.2",
     "react-confirm-alert": "^2.7.0",

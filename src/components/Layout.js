@@ -72,10 +72,12 @@ function Layout(props) {
           dashboard.actions &&
           dashboard.actions.map((option, index) => (
             <ListItem
-              selected={activeTab}
+            style={{padding:'10px'}}
+              selected={activeTab === index}
               button
               key={index}
               onClick={() => {
+                setactiveTab(index)
                 history.push(option.route);
               }}>
               <ListItemIcon>{option.icon}</ListItemIcon>
@@ -180,7 +182,7 @@ function Layout(props) {
               width: drawerWidth,
             },
           }}>
-          {console.log("LOGO IMAGE", logo)}
+]
           <Image
             src={logo}
             alt="image"
@@ -202,6 +204,7 @@ function Layout(props) {
           open>
           <img
             src={logo}
+            alt='logo'
             width="100px"
             style={{ margin: "0 auto", marginTop: "10px" }}
           />
@@ -212,6 +215,7 @@ function Layout(props) {
       <Box
         component="main"
         sx={{
+          // background:'black',
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },

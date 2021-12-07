@@ -16,6 +16,7 @@ import {
 } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import classes from "./researcher.module.css";
+import MaterialTable from 'material-table';
 
 const PublicPrograms = () => {
   const publicPrograms = useSelector((state) => state.publicPrograms);

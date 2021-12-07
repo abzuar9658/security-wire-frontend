@@ -30,8 +30,7 @@ const SubmissionsApproval = () => {
       history.push("/login");
     }
     if (
-      submissionsApproval &&
-      (submissionsApproval.isSuccess === null || !submissionsApproval.isSuccess)
+      submissionsApproval && !submissionsApproval.isSuccess && !submissionsApproval.isError
     ) {
       dispatch(submissionsToApprove());
     } else {
@@ -94,6 +93,7 @@ const SubmissionsApproval = () => {
   };
   return (
     <MaterialTable
+
       columns={columns}
       data={data}
       title="Submissions to Approve"

@@ -156,6 +156,7 @@ const EnrolledPrograms = () => {
         <h3>You are not enrolled in any program yet</h3>
       ) : null}
       <MaterialTable
+
         columns={columns}
         data={data}
         title="Enrolled Programs"

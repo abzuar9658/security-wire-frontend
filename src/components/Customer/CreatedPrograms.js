@@ -197,6 +197,7 @@ function SubmissionsModal({ program }) {
       <Modal.Content>
         <div style={{ zIndex: 99999999 }}>
           <MaterialTable
+
             columns={columns}
             data={data}
             title="Submissions"

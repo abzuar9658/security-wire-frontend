@@ -25,7 +25,7 @@ const ProgramsApproval = () => {
     if (!localStorage.getItem("token")) {
       history.push("/login");
     }
-    if (programsApproval && !programsApproval.isSuccess) {
+    if (programsApproval && !programsApproval.isSuccess && !programsApproval.isError) {
       dispatch(programsToApprove());
     } else {
       console.log("programs", programsApproval, programsApproval.data.programs);
@@ -62,6 +62,7 @@ const ProgramsApproval = () => {
   }, [programsApproval]);
   return (
     <MaterialTable
+
       columns={columns}
       data={data}
       title="Programs to Approve"

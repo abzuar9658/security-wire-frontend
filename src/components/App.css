@@ -26,3 +26,8 @@
 .tableHover:hover {
   cursor: pointer;
 }
+
+.MuiButtonBase-root{
+  background-color: #282c34;
+  padding:12px;
+}
