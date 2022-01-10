@@ -256,3 +256,57 @@ export const getSecurityResearchers = () => async (dispatch) => {
     return error;
   }
 };
+
+export const getCreatedScans = () => async (dispatch) => {
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    };
+    let userScans = await axios.get(`${API}/Scanner`, config);
+    console.log("THIS USER SCANS", userScans.data);
+    dispatch({
+      type: actionTypes.GET_SCANNED_PROGRAMS_SUCCESS,
+      payload: userScans.data,
+    });
+    return true;
+  } catch (error) {
+    console.error(error.message);
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    return error;
+  }
+};
+export const scanProgram = (url) => async (dispatch) => {
+  try {
+    dispatch({ type: actionTypes.SCAN_PROGRAM_LOADING });
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    };
+    let res = await axios.post(`${API}/Scanner/create`, { url }, config);
+    res = res.data;
+    if (res !== null) {
+      dispatch(getCreatedScans());
+      return true;
+    }
+    throw new Error("something went wrong!");
+  } catch (error) {
+    console.error(error.message);
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    return error;
+  }
+};

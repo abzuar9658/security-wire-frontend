@@ -15,6 +15,7 @@ import ProgramsApproval from "./Admin/ProgramsApproval";
 import SubmissionsApproval from "./Admin/SubmissionsApproval";
 import Researchers from "./Admin/Researchers";
 import Customers from "./Admin/Customers";
+import Scanner from "./Customer/Scanner/Scanner";
 import { verify } from "../actions";
 import { useDispatch } from "react-redux";
 function App() {
@@ -67,6 +68,9 @@ function App() {
           </Route>
           <Route path="/register">
             <Register />
+          </Route>
+          <Route path="/customer/autoscan">
+            <Scanner />
           </Route>
         </Switch>
       </Layout>

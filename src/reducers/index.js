@@ -7,6 +7,7 @@ import {
   deleteProgramReducer,
   inviteResearchersReducer,
   getResearchersReducer,
+  createdScansReducer,
 } from "./customerReducer";
 import {
   publicProgramsReducer,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   submissionsApproval: submissionsAprroveReducer,
   allResearchers: researchersReducer,
   allCustomers: customersReducer,
+  createdScans: createdScansReducer,
 });
 
 export default rootReducer;

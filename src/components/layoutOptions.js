@@ -11,6 +11,7 @@ import EnhancedEncryptionIcon from "@mui/icons-material/EnhancedEncryption";
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
 import LoginIcon from "@mui/icons-material/Login";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import GppGoodIcon from "@mui/icons-material/GppGood";
 export default [
   {
     role: "no-auth",
@@ -33,14 +34,19 @@ export default [
     title: "Customer Dashboard",
     actions: [
       {
-        label: "View Created Programs",
-        route: "/customer/createdPrograms",
-        icon: <ViewAgendaIcon />,
+        label: "Automated Scanner",
+        route: "/customer/autoscan",
+        icon: <GppGoodIcon />,
       },
       {
         label: "Create new Program",
         route: "/customer/createProgram",
         icon: <AddIcon />,
+      },
+      {
+        label: "View Created Programs",
+        route: "/customer/createdPrograms",
+        icon: <ViewAgendaIcon />,
       },
     ],
   },
