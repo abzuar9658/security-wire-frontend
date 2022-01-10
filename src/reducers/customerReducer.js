@@ -268,15 +268,38 @@ export const getResearchersReducer = (state = { ...initial_state }, action) => {
         isError: false,
         errorMessage: null,
       };
-    // case actionTypes.CLEAR_CREATE_PROGRAM_SUCCESS:
-    //   return {
-    //     ...state,
-    //     data: [],
-    //     isLoading: null,
-    //     isSuccess: null,
-    //     isError: null,
-    //     errorMessage: null,
-    //   };
+    default:
+      return state;
+  }
+};
+
+export const createdScansReducer = (state = { ...initial_state }, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case actionTypes.GET_SCANNED_PROGRAMS_SUCCESS:
+      return {
+        ...state,
+        data: payload.data,
+        isSuccess: true,
+        isLoading: false,
+        isError: false,
+      };
+    case actionTypes.GET_SCANNED_PROGRAMS_FAIL:
+      return {
+        ...state,
+        data: null,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        errorMessage: payload,
+      };
+
+    case actionTypes.CLEAR_ERRORS:
+      return {
+        ...state,
+        isError: false,
+        errorMessage: null,
+      };
     default:
       return state;
   }
