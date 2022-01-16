@@ -127,6 +127,17 @@ const CreatedPrograms = () => {
                             </Dropdown.Item>
                           </MyModal>
                         </Dropdown.Item>
+                        <Dropdown.Item disabled={program.isApproved}>
+                          <MyModal
+                              component='chat'
+                              header="Chat with admin"
+                              user2={{_id: "6106bb7f8d9f1c22c80068ac"}}>
+                            <Dropdown.Item>
+                              <Icon name="chat" />
+                              Chat with Admin
+                            </Dropdown.Item>
+                          </MyModal>
+                        </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
                   </Table.Cell>
@@ -174,7 +185,10 @@ function SubmissionsModal({ program }) {
               Accept Submission
             </Button> */}
             <Payment submission={sb} program={program} />
-            <Button color="purple">Chat</Button>
+            {/*<Button color="purple">Chat</Button>*/}
+            <MyModal component='chat' style={{height:'50vh'}} user2={sb.researcherId} header={'Chat with '+ sb.researcherId.name}>
+              <Button color="purple">Chat</Button>
+            </MyModal>
           </>
         ),
       }));
@@ -197,7 +211,6 @@ function SubmissionsModal({ program }) {
       <Modal.Content>
         <div style={{ zIndex: 99999999 }}>
           <MaterialTable
-
             columns={columns}
             data={data}
             title="Submissions"

@@ -8,12 +8,22 @@ import {
   Message,
   Icon,
 } from "semantic-ui-react";
+import Particles from "react-tsparticles";
 import { useHistory, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearErrors, login } from "../../actions/index";
 import classes from "./style.module.css";
 
 const Login = () => {
+  const particlesInit = (main) => {
+    console.log(main);
+
+    // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
+  };
+
+  const particlesLoaded = (container) => {
+    console.log(container);
+  };
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [errors, seterrors] = useState([]);
@@ -66,11 +76,12 @@ const Login = () => {
       : "";
   };
   return (
+      <>
     <Grid
       textAlign="center"
       verticalAlign="middle"
       className={classes.background}>
-      <Grid.Column style={{ maxWidth: 450 }}>
+      <Grid.Column style={{ maxWidth: 450, padding:'50px',}} >
         <Header as="h1" icon color="violet" textAlign="center">
           Login here
         </Header>
@@ -126,6 +137,7 @@ const Login = () => {
         </Message>
       </Grid.Column>
     </Grid>
+        </>
   );
 };
 

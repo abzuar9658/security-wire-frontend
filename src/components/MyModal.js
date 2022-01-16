@@ -1,6 +1,8 @@
 import React from "react";
 import { Button, Modal, Icon } from "semantic-ui-react";
 import InviteResearchers from "./Customer/InviteResearchers";
+import Chat from "./Chat/Chat";
+
 function MyModal(props) {
   const {
     component,
@@ -12,6 +14,8 @@ function MyModal(props) {
     size,
     action,
     programId,
+      user2
+
   } = props;
   const [open, setOpen] = React.useState(false);
   const toggleModal = () => {
@@ -19,7 +23,7 @@ function MyModal(props) {
   };
   return (
     <Modal
-      closeOnDimmerClick={false}
+      closeOnDimmerClick={true}
       closeIcon
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
@@ -34,12 +38,16 @@ function MyModal(props) {
         )
       }
       open={open}
-      size="tiny">
+      size="tiny"
+    >
       <Modal.Header>{header}</Modal.Header>
       <Modal.Content>
         {console.log("COMPONENT", component)}
         {component === "invite-researchers" && (
           <InviteResearchers programId={programId} toggleModal={toggleModal} />
+        )}
+        {component === "chat" && (
+         <Chat user2={user2}/>
         )}
       </Modal.Content>
     </Modal>

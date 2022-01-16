@@ -36,6 +36,7 @@ const EnrolledPrograms = () => {
   const [data, setdata] = useState([]);
   const [selectedFile, setselectedFile] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const [enrolledLoading, setenrolledLoading] = useState(false);
 
   const onFileUpload = (programId, selectedFile, idx) => {
     console.log("selected file", selectedFile[idx]);
@@ -69,7 +70,15 @@ const EnrolledPrograms = () => {
       }
     }
   };
+  const handleUnenroll = (pg) => {
+    console.log("UNENROLLING...", enrolledLoading)
+    setenrolledLoading(true)
+    dispatch(unenroll(pg)).then(res=>{
+      setenrolledLoading(false)
+      console.log("UNENROLLED...", enrolledLoading)
 
+    });
+  }
   useEffect(() => {
     if (!userId) {
       history.push("/login");
@@ -83,7 +92,7 @@ const EnrolledPrograms = () => {
         enrolledPrograms.data.programs.map((pg, idx) => ({
           title: pg.title,
           customer: pg.customer.name,
-          date: pg.date,
+          date: new Date(pg.date).toLocaleString(),
           inScope:
             pg.inScope &&
             pg.inScope.map((scope, key) => <p key={key}>{scope}</p>),
@@ -116,8 +125,6 @@ const EnrolledPrograms = () => {
                       onChange={(e) => addFile(e, idx)}
                     />
                   </div>
-                  {console.log("IsUploadDIsables", !selectedFile[idx])}
-                  {/* <Input onChange={addFile} fluid name="file" type="file" /> */}
                   <Button
                     loading={isLoading ? true : false}
                     size="mini"
@@ -132,9 +139,9 @@ const EnrolledPrograms = () => {
               <Button
                 size="mini"
                 secondary
+                loading={enrolledLoading}
                 onClick={() => {
-                  console.log("PROGRAM ID: ", pg._id);
-                  dispatch(unenroll(pg._id));
+                  handleUnenroll(pg._id)
                 }}>
                 Unenroll
               </Button>
@@ -160,7 +167,8 @@ const EnrolledPrograms = () => {
         columns={columns}
         data={data}
         title="Enrolled Programs"
-        style={{ widht: "80%" }}
+        // style={{ width: "80%" }}
+        // style={{width: 200}}
       />
     </>
   );

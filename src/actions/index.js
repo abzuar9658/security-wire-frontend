@@ -1,13 +1,39 @@
 import * as actionTypes from "./types";
 import axios from "axios";
+import { toast } from "react-toastify";
 import API from "./api";
+
+export const getMessages = (user2) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+    const res = await axios.get(`${API}/chats/${user2}`, config);
+    if(res.status === 200){
+      return res.data;
+    }
+    throw new Error('Sorry, something went wrong')
+  } catch (error) {
+    console.error(error.response);
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+}
 
 const loginLoading = () => {
   return {
     type: actionTypes.LOGIN_LOADING,
   };
 };
-
 export const login = (body) => async (dispatch) => {
   const { email, password } = body;
   dispatch(loginLoading());
@@ -25,6 +51,7 @@ export const login = (body) => async (dispatch) => {
     });
   }
 };
+
 export const verify = () => async (dispatch) => {
   dispatch(loginLoading());
   try {

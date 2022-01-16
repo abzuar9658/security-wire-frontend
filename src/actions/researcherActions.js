@@ -166,6 +166,55 @@ export const postNewSubmission = (programId, file) => async (dispatch) => {
   }
 };
 
+export const updateSubmission = (submissionId, file) => async (dispatch) => {
+  try {
+    toast.success("Posting Submissions", {
+      position: "top-right",
+      autoClose: 1000,
+      // hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/pdf",
+      },
+    };
+    const res = await axios.patch(
+        `${API}/submissions/${submissionId}`,
+        file,
+        config
+    );
+    if (res.status === 201) {
+      toast.success("Submission update success", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      dispatch(getSubmittedPrograms());
+    }
+    return res;
+  } catch (error) {
+    console.error(error.response);
+    toast.error(error.response ? error.response.data.message : error.message, {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+};
+
 export const unenroll = (programId) => async (dispatch) => {
   try {
     const config = {

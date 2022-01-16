@@ -33,7 +33,7 @@ const Scanner = () => {
           url: data.url,
           date: new Date(data.date).toDateString(),
           logs: data.logs,
-          status: data.status,
+            status: data.status === 'active' ? <span style={{background: 'orange', borderRadius:'10px', padding:'10px'}}>{data.status}</span>:<span style={{background: 'green', color:'white', borderRadius:'10px', padding:'10px'}}>{data.status}</span>
         }));
       setdata(dataLocal);
     }
@@ -87,11 +87,7 @@ const Scanner = () => {
         columns={columns}
         data={data.reverse()}
         title="Your Scans"
-        style={{ widht: "80%", height: "50vh", overflow: "scroll" }}
-        options={{
-          pageSize: 4,
-          emptyRowsWhenPaging: false, // To avoid of having empty rows
-        }}
+        style={{ widht: "80%", maxHeight: "50vh", overflow: "scroll" }}
       />
     </div>
   );

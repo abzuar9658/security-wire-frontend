@@ -34,9 +34,9 @@ export default [
     title: "Customer Dashboard",
     actions: [
       {
-        label: "Automated Scanner",
-        route: "/customer/autoscan",
-        icon: <GppGoodIcon />,
+        label: "View Created Programs",
+        route: "/customer/createdPrograms",
+        icon: <ViewAgendaIcon />,
       },
       {
         label: "Create new Program",
@@ -44,9 +44,9 @@ export default [
         icon: <AddIcon />,
       },
       {
-        label: "View Created Programs",
-        route: "/customer/createdPrograms",
-        icon: <ViewAgendaIcon />,
+        label: "Automated Scanner",
+        route: "/customer/autoscan",
+        icon: <GppGoodIcon />,
       },
     ],
   },

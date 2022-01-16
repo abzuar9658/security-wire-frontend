@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { programsToApprove, approveProgram } from "../../actions/adminActions";
 import MaterialTable from "material-table";
 import { Button } from "semantic-ui-react";
+import MyModal from "../MyModal";
 const columns = [
   { title: "Program Title", field: "title" },
   { title: "Company Name", field: "customer" },
@@ -52,7 +53,9 @@ const ProgramsApproval = () => {
                 }}>
                 Approve
               </Button>
-              <Button color="purple">Chat</Button>
+                <MyModal component='chat' style={{height:'50vh'}} user2={pg.customer} header={'Chat with '+pg.customer.name}>
+                    <Button color="purple">Chat</Button>
+                </MyModal>
             </>
           ),
         }));

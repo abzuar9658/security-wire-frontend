@@ -40,61 +40,47 @@ const PublicPrograms = () => {
       {publicPrograms.isSuccess > 0
         ? [...publicPrograms.data.program].map((program, idx) => {
             return (
-              <div key={idx} className={classes.publicProgramsList}>
-                <List verticalAlign="middle">
-                  <List.Item>
-                    <List.Content>
-                      <h2>{program.title}</h2>
-                    </List.Content>
-                    <br />
-                    <List.Description>
-                      <h4>{program.detail.substring(0, 50)}...</h4>
-                    </List.Description>
-                    <List.Description>
-                      <div style={{ marginTop: "10px" }}>
-                        IN SCOPE LINKS:
-                        <div className={classes.linksContainer}>
-                          {program.inScope.map((link, idx) => (
-                            <span key={idx} className={classes.linksItem}>
-                              {link}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </List.Description>
-                    <List.Description>
-                      {program.outScope.length > 0 && "OUT SCOPE LINKS:"}
-                      <div className={classes.linksContainer}>
-                        {program.outScope.map((link, idx) => (
-                          <span key={idx} className={classes.linksItem}>
-                            {link}
-                          </span>
-                        ))}
-                      </div>
-                    </List.Description>
-                    <br />
-                    <List.Description>
-                      <div>
-                        CREATED BY : <strong>{program.customer.name}</strong>
-                      </div>
-                    </List.Description>
-                    <br />
-                    {program.enrolled.includes(userId) && (
-                      <p className={classes.enrolledSticker}>Enrolled</p>
-                    )}
-
-                    <List.Content floated="right">
-                      <Button
-                        color="blue"
-                        onClick={() => {
-                          dispatch(getEnrolled(program._id));
-                        }}>
-                        Get Enrolled
-                      </Button>
-                    </List.Content>
-                  </List.Item>
-                </List>
-              </div>
+            <Card fluid key={idx} style={{width:'85%', margin:'0 auto', marginTop:'3em'}}>
+              <Card.Content header={program.title}/>
+              {program.detail && <Card.Content description={program.detail && program.detail.substring(0, 50) + '...'}/>}
+              {program.inScope.length>0 && <Card.Content>
+                {program.inScope.length > 0 && "IN SCOPE LINKS:"}
+                {program.inScope.map((link, idx) => (
+                    <span key={idx} className={classes.linksItem}>
+                    {link}
+                  </span>
+                ))}
+              </Card.Content>}
+              {program.outScope.length>0 && <Card.Content>
+                {program.outScope.length > 0 && "OUT SCOPE LINKS:"}
+                {program.outScope.map((link, idx) => (
+                    <span key={idx} className={classes.linksItem}>
+                    {link}
+                  </span>
+                ))}
+              </Card.Content>}
+              <Card.Content extra>
+                <div style={{display:'flex', justifyContent:'space-between'}}>
+                  <span>CREATED BY : <strong><Icon name='user' />{program.customer.name}</strong></span>
+                  {program.enrolled.find(user => user.toString() === userId.toString()) ? <Button
+                      disabled
+                      color="blue"
+                      style={{marginRight: '2em'}}
+                      onClick={() => {
+                        dispatch(getEnrolled(program._id));
+                      }}>
+                    Enrolled
+                  </Button>: <Button
+                      color="blue"
+                      style={{marginRight: '2em'}}
+                      onClick={() => {
+                        dispatch(getEnrolled(program._id));
+                      }}>
+                    Get enrolled
+                  </Button>}
+                </div>
+              </Card.Content>
+            </Card>
             );
           })
         : null}

@@ -32,33 +32,6 @@ const CreateNewProgram = (props) => {
   const [vrts, setvrts] = useState([]);
   const [errors, seterrors] = useState({});
 
-  // const formik = useFormik({
-  //   initialValues: {
-  //     title: "",
-  //     intro: "",
-  //     detail: "",
-  //     active: false,
-  //     isPublic: false,
-  //     inScopeLinks: [],
-  //     outScopeLinks: [],
-  //     vrt: [],
-  //   },
-  //   validationSchema: Yup.object({
-  //     title: Yup.string()
-  //       .min(5, "Must be atleast 5 characters or more")
-  //       .required("please enter title of the program"),
-  //     active: Yup.string().required("please select program status"),
-  //     isPublic: Yup.string().required("please select program visibility"),
-  //     inScopeLinks: Yup.string().required(
-  //       "atleast one inscope link is required"
-  //     ),
-  //     vrt: Yup.string().required("please enter atleast"),
-  //   }),
-  //   onSubmit: (values) => {
-  //     alert(JSON.stringify(values, null, 2));
-  //   },
-  // });
-
   const handleDelete = (id) => {
     confirmAlert({
       title: "Confirm to delete",
@@ -83,7 +56,6 @@ const CreateNewProgram = (props) => {
     console.log(location);
     if (location) {
       const { program } = location;
-      console.log("BEST PROGRAM", program);
       let inscopelinks = [];
       let outscopelinks = [];
       let vrt = [];
@@ -112,7 +84,7 @@ const CreateNewProgram = (props) => {
         setintro(program.intro);
         setdetail(program.detail);
         setactive(program.active);
-        setisPublic(program.isPublic);
+        setisPublic(program.ispublic);
         setinScopeLinks(inscopelinks);
         setoutScopeLinks(outscopelinks);
         setvrts(vrt);

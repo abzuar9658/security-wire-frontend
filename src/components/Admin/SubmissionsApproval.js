@@ -10,6 +10,7 @@ import MaterialTable from "material-table";
 import { Button } from "semantic-ui-react";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import MyModal from "../MyModal";
 
 const columns = [
   { title: "Program Title", field: "title" },
@@ -62,7 +63,9 @@ const SubmissionsApproval = () => {
                 }}>
                 Approve
               </Button>
-              <Button color="purple">Chat</Button>
+              <MyModal component='chat' style={{height:'50vh'}} user2={sb.researcherId} header={'Chat with '+ sb.researcherId.name}>
+                <Button color="purple">Chat</Button>
+              </MyModal>
             </>
           ),
         }));
@@ -93,7 +96,6 @@ const SubmissionsApproval = () => {
   };
   return (
     <MaterialTable
-
       columns={columns}
       data={data}
       title="Submissions to Approve"

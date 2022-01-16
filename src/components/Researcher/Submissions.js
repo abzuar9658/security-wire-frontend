@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getSubmittedPrograms,
-  postNewSubmission,
-  unenroll,
-  downloadFile,
+    getSubmittedPrograms,
+    postNewSubmission,
+    unenroll,
+    downloadFile, updateSubmission,
 } from "../../actions/researcherActions";
 import { Loader, List, Button } from "semantic-ui-react";
 import { NavLink, useHistory } from "react-router-dom";
@@ -16,12 +16,14 @@ import Stack from "@mui/material/Stack";
 import MaterialTable from "material-table";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
+import MyModal from "../MyModal";
 
 const columns = [
   { title: "Sr", field: "sr" },
   { title: "Program", field: "programId" },
   { title: "POC", field: "poc" },
-  { title: "Is Approved", field: "isApproved" },
+  { title: "Status", field: "isApproved" },
+  { title: "Actions", field: "actions" },
 ];
 const SubmittedPrograms = () => {
   const submittedPrograms = useSelector((state) => state.submittedPrograms);
@@ -31,9 +33,43 @@ const SubmittedPrograms = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [data, setdata] = useState([]);
-  const [selectedFile, setselectedFile] = useState();
-  const [isLoading, setisLoading] = useState(false);
+    const [selectedFile, setselectedFile] = useState([]);
+    const [isLoading, setisLoading] = useState(false);
 
+    const onFileUpload = (submissionId, selectedFile, idx) => {
+        console.log("selected file", selectedFile[idx]);
+        if (selectedFile[idx]) {
+            setisLoading(true);
+            const formData = new FormData();
+            formData.append("file", selectedFile[idx], selectedFile[idx].name);
+            dispatch(updateSubmission(submissionId, formData)).then((res) => {
+                setisLoading(false);
+            });
+        }
+    };
+
+    const addFile = (event, idx) => {
+        console.log("INDEX: ", idx);
+        let selected = [...selectedFile];
+        console.log("SELECETEDs: ", selected);
+        const file = event.target.files[0];
+        if (file) {
+            console.log("INDEX SL:", idx, selectedFile[idx]);
+            if (!!selectedFile[idx]) {
+                setselectedFile((prevState) => prevState.splice(idx, 1, file));
+            } else {
+                setselectedFile((prevState) => {
+                    let local = [...prevState];
+                    local[idx] = file;
+                    console.log("LOCAL: ", local);
+                    return local;
+                });
+            }
+        }
+    };
+    useEffect(() => {
+        console.log("I am reran!!", selectedFile);
+    }, [selectedFile]);
   useEffect(() => {
     if (!userId) {
       history.push("/login");
@@ -57,30 +93,45 @@ const SubmittedPrograms = () => {
               {pg.poc}
             </NavLink>
           ),
-          isApproved: pg.isApproved,
+            isApproved: !pg.isApproved
+                ?<p style={{background:'grey', textAlign:'center',color:'white', padding:'5px', borderRadius:'10px'}}>Pending Approval</p>
+                :<p style={{background:'green', textAlign:'center',color:'white', padding:'5px', borderRadius:'10px'}}>Approved by Admin</p>,
           actions: (
             <div style={{ display: "flex" }}>
-              <Button loading={isLoading ? true : false} size="mini" primary>
-                Upload
-              </Button>
-              <input
-                type="file"
-                name="file"
-                onChange={(e) => {
-                  console.log(e.target.files);
-                  setselectedFile(e.target.files[0]);
-                }}
-              />
-              <Button size="mini" secondary>
-                unsubmit
-              </Button>
+                <>
+                    <Button
+                        loading={isLoading ? true : false}
+                        size="mini"
+                        color='orange'
+                        // disabled={!selectedFile[idx]}
+                        onClick={() => {
+                            onFileUpload(pg._id, selectedFile, idx)
+                            setselectedFile([])
+                        }}>
+                        Upload
+                    </Button>
+                    <div>
+                        <input
+                            type="file"
+                            name="file"
+                            onChange={(e) => addFile(e, idx)}
+                        />
+                    </div>
+
+                </>
+              <MyModal component='chat' style={{height:'50vh'}} user2={{_id:pg.programId.customer}} header={'Chat with Customer'}>
+                   <Button color="blue" disabled={!pg.isApproved}>Chat with customer</Button>
+              </MyModal>
+              <MyModal component='chat' style={{height:'50vh'}} disabled={pg.isApproved} user2={{_id: "6106bb7f8d9f1c22c80068ac"}} header={'Chat with Admin'}>
+                   <Button color="purple">Chat with admin</Button>
+              </MyModal>
             </div>
           ),
         }));
       console.log(programs);
       setdata(programs);
     }
-  }, [submittedPrograms]);
+  }, [submittedPrograms,selectedFile]);
   return (
     <>
       {submittedPrograms.isLoading === true ? <Loader active /> : null}
