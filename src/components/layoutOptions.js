@@ -43,11 +43,11 @@ export default [
         route: "/customer/createProgram",
         icon: <AddIcon />,
       },
-      {
-        label: "Automated Scanner",
-        route: "/customer/autoscan",
-        icon: <GppGoodIcon />,
-      },
+      // {
+      //   label: "Automated Scanner",
+      //   route: "/customer/autoscan",
+      //   icon: <GppGoodIcon />,
+      // },
     ],
   },
   {

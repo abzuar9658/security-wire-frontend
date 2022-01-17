@@ -3,12 +3,9 @@ import { Input, Button, Icon } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCreatedScans, scanProgram } from "../../../actions/customerActions";
 import { useHistory } from "react-router";
-import MaterialTable from "material-table";
 import urlExist from "url-exist";
+import MaterialTable from "material-table";
 import axios from "axios";
-import socketIOClient from "socket.io-client";
-import { useStateManager } from "react-select";
-
 const columns = [
   { title: "URL", field: "url" },
   { title: "Date Created", field: "date" },
@@ -24,67 +21,17 @@ const Scanner = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const createdScans = useSelector((state) => state.createdScans);
-  const [Results, setResults] = useState([]);
-
   useEffect(() => {
     if (!localStorage.getItem("token")) history.push("/login");
   }, []);
-
-  useEffect(() => {
-    loadResults();
-    const socket = socketIOClient("http://localhost:4000/");
-    socket.on("FromAPI", (data) => {
-      console.log("------===+===---------");
-      loadResults();
-    });
-  }, []);
-
-  const loadResults = async () => {
-    seturlError(null);
-    let config = {};
-    try {
-      config = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      };
-    } catch (e) {
-      console.log(e);
-    }
-    axios
-      .get(`http://localhost:8000/api/v1/Scanner`, config)
-      .then((response) => {
-        const result = response.data;
-        var { status, data } = result;
-        data = JSON.stringify(data);
-        data = JSON.parse(data);
-        data = data.Scan;
-        if (status != "success") {
-          seturlError("some error occured");
-        } else {
-          data = data.filter((val) => val.url != "error");
-          console.log(data);
-          setResults(data);
-        }
-      })
-      .catch((error) => {
-        if (error.status == 403) {
-          seturlError("Access denied, Login Again");
-        } else {
-          seturlError("An error occurred. Check your network and try again");
-        }
-        console.log(error);
-        console.log("error");
-      });
-  };
 
   useEffect(() => {
     if (!createdScans.isSuccess) {
       dispatch(getCreatedScans());
     } else {
       const dataLocal =
-        Results &&
-        Results.map((data) => ({
+        createdScans.data.Scan &&
+        createdScans.data.Scan.map((data) => ({
           url: data.url,
           date: new Date(data.date).toDateString(),
           logs: data.logs,
@@ -140,14 +87,15 @@ const Scanner = () => {
     return !!pattern.test(str);
   }
 
-  const sendValues = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     seturlError(null);
     const isLive = await urlExist(url);
     console.log(validURL(url));
     console.log(isLive);
     console.log("isLive");
-    if (validURL(url)) {
+    // if (validURL(url)) {
+    if (true) {
       axios
         .get(`http://localhost:8000/api/v1/Scanner/status`, {
           headers: {
@@ -156,7 +104,8 @@ const Scanner = () => {
         })
         .then((response) => {
           var { status, data } = response;
-          if (data.status != false) {
+          // if (data.status != false) {
+          if (!true) {
             seturlError("Wait for Previous Scan to complete.");
           } else {
             seturl(null);
@@ -193,16 +142,8 @@ const Scanner = () => {
     } else {
       seturlError("Enter Valid Url.");
     }
-    loadResults();
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isValidUrl()) return;
-    setloading(true);
-    dispatch(scanProgram(url)).then((res) => {
-      setloading(false);
-    });
-  };
+
   return (
     <div>
       <br />
@@ -210,7 +151,7 @@ const Scanner = () => {
         Welcome to Security Wire Automated Scanning
       </h1>
       <form
-        onSubmit={sendValues}
+        onSubmit={handleSubmit}
         style={{ display: "flex", justifyContent: "center", margin: "3em" }}
       >
         <Input

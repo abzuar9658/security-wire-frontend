@@ -212,7 +212,7 @@ const CreateNewProgram = (props) => {
           </p>
         )}
         <OutScopeLinks
-          placeholder="Enter Output Links*"
+          placeholder="Enter Outscope Links*"
           setoutScopeLinks={setoutScopeLinks}
           defaultValue={outScopeLinks}
         />
@@ -271,7 +271,8 @@ const CreateNewProgram = (props) => {
           <Button
             color="green"
             onClick={(e) => handleSubmit(e)}
-            loading={createProgram.isLoading}>
+            loading={createProgram.isLoading}
+          >
             <Icon name="add" />
             {location && location.program ? "Update PROGRAM" : "CREATE PROGRAM"}
           </Button>
@@ -281,7 +282,8 @@ const CreateNewProgram = (props) => {
                 color="red"
                 onClick={() => {
                   handleDelete(location.program._id);
-                }}>
+                }}
+              >
                 <Icon name="delete" />
                 Delete Progam
               </Button>
@@ -290,7 +292,8 @@ const CreateNewProgram = (props) => {
                 component="invite-researchers"
                 header="Invite Researchers"
                 color="blue"
-                programId={location.program._id}>
+                programId={location.program._id}
+              >
                 <Button disabled={!location.program.isApproved}>
                   <Icon name="mail" />
                   Invite Researchers
